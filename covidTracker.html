@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)https://fiddle.jshell.net/vasantha_kumar/ou4g7ynL/show/light/ -->
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <title>Covid-Tracker</title>
+
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"> </script>
+
+  <style id="compiled-css" type="text/css">
+    footer {
+      display: flex;
+      background-color: dimgrey;
+      justify-content: space-between;
+      color: thistle
+    }
+
+    .canvasjs-chart-credit {
+      display: none !important;
+    }
+
+    body {
+      background-color: slategrey
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+    <footer>
+      <div id="author">
+        Made by Vasanth
+
+      </div>
+      <div id="source">
+        Source - COVID19-India API
+
+      </div>
+    </footer>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    window.onload = function() {
+      var dataPoints = [];
+      var chart = new CanvasJS.Chart("chartContainer", {
+        theme: "dark2", //"light1", "dark1", "dark2" 
+        title: {
+          text: "COVID19-India"
+        },
+        axisY: {
+          title: "No of Cases"
+        },
+        axisX: {
+          title: "Date"
+        },
+        animationEnabled: true,
+        exportEnabled: true,
+        data: [{
+          type: "column",
+          dataPoints: dataPoints,
+        }]
+      });
+      var date = new Date();
+      console.log(date.getFullYear())
+      $.getJSON("https://api.covid19india.org/data.json", function(data) {
+        data.cases_time_series.map(function(item) {
+          dataPoints.push({
+            x: new Date(item.date + date.getFullYear()),
+            y: parseInt(item.dailyconfirmed)
+          });
+        })
+        chart.render();
+      });
+    }
+    //]]>
+  </script>
+
+</body>
+
+</html>
